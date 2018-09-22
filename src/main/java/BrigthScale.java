@@ -9,7 +9,8 @@ import javax.imageio.ImageIO;
 public class BrigthScale {
 
 	BufferedImage image;
-	int width;
+	int width; 
+	
 	int height;
 	int factor = 20;
 	
