@@ -2,26 +2,26 @@ package FilterClasses;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import java.io.*;
-
 import javax.imageio.ImageIO;
 
 
 public class SepiaScale {
+	private File inputFile;
+	private File outputFile;
+	private long elapsedMs;
 
-	BufferedImage image;
-	int width;
-	int height;
+	public SepiaScale(File inputFile,String opMode) {
+		this.inputFile = inputFile;
+		this.sequentialProcess();
+	}
 
-
-	public SepiaScale() {
-
+	private void sequentialProcess(){
+		long startTime = System.currentTimeMillis();
 		try {
-			File input = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/digital_image_processing.jpg");
-			image = ImageIO.read(input);
-			width = image.getWidth();
-			height = image.getHeight();
+			BufferedImage image = ImageIO.read(this.inputFile);
+			int width = image.getWidth();
+			int height = image.getHeight();
 			int sepiaDepth = 20;
 
 			int w = image.getWidth();
@@ -32,9 +32,7 @@ public class SepiaScale {
 			image.getRaster().getPixels(0, 0, w, h, pixels);
        
 			for (int i = 0; i < height; i++) {
-
 				for (int j = 0; j < width; j++) {
-
 					int rgb = image.getRGB(j, i);
 					Color color = new Color(rgb, true);
 					int r = color.getRed();
@@ -49,9 +47,7 @@ public class SepiaScale {
 					if (r > 255) { r = 255; }
 					if (g > 255) { g = 255; }
 					if (b > 255) { b = 255; }
-	
 					// Darken blue color to increase sepia effect
-					
 	
 					// normalize if out of bounds
 					if (b < 0)   { b = 0; }
@@ -59,16 +55,22 @@ public class SepiaScale {
 	
 					color = new Color(r, g, b, color.getAlpha());
 					image.setRGB(j, i, color.getRGB());
-
-
 				}
 			}
-
-			File ouptut = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/sepiascale.jpg");
-			ImageIO.write(image, "jpg", ouptut);
+			this.outputFile = new File("src/main/java/imgs/sepia.jpg");
+			ImageIO.write(image, "jpg", this.outputFile);
+			elapsedMs = System.currentTimeMillis() - startTime;
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public long getElapsedMs(){
+		return this.elapsedMs;
+	}
+
+	public File getOutputFile(){
+		return this.outputFile;
 	}
 }

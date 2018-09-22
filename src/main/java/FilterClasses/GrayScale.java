@@ -6,9 +6,12 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
+import com.google.common.base.Stopwatch;
+
 public class GrayScale {
 	File inputFile;
 	File outputFile;
+	private long elapsedMs;
 
 	public GrayScale(File inputFile, String opMode) {
 		this.inputFile = inputFile;
@@ -16,6 +19,7 @@ public class GrayScale {
 	}
 
 	private void sequentialProcess(){
+		long startTime = System.currentTimeMillis();
 		try {
 			BufferedImage image = ImageIO.read(this.inputFile);
 			int	width = image.getWidth();
@@ -35,10 +39,15 @@ public class GrayScale {
 			}
 			this.outputFile = new File("src/main/java/imgs/gray.jpg");
 			ImageIO.write(image, "jpg", this.outputFile);
+			elapsedMs = System.currentTimeMillis() - startTime;
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public long getElapsedMs(){
+		return this.elapsedMs;
 	}
 
 	public File getOutputFile(){

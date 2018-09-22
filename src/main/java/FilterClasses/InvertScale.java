@@ -1,32 +1,28 @@
 package FilterClasses;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import java.io.*;
-
 import javax.imageio.ImageIO;
 
 
 public class InvertScale {
+	File inputFile;
+	File outputFile;
+	private long elapsedMs;
 
-	BufferedImage image;
-	int width;
-	int height;
+	public InvertScale(File inputFile,String opMode) {
+		this.inputFile = inputFile;
+		this.sequentialProcess();
+	}
 
-	public InvertScale() {
-
+	public void sequentialProcess(){
+		long startTime = System.currentTimeMillis();
 		try {
-			File input = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/digital_image_processing.jpg");
-			image = ImageIO.read(input);
-			width = image.getWidth();
-			height = image.getHeight();
-       
+			BufferedImage image = ImageIO.read(this.inputFile);
+			int width = image.getWidth();
+			int height = image.getHeight();
 			for (int i = 0; i < height; i++) {
-
 				for (int j = 0; j < width; j++) {
-
-
 					int rgb = image.getRGB(j, i);
 					Color color = new Color(rgb, true);
 					int r = 255 - color.getRed();
@@ -37,12 +33,19 @@ public class InvertScale {
 					image.setRGB(j, i, color.getRGB());
 				}
 			}
-
-			File ouptut = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/invertscale.jpg");
-			ImageIO.write(image, "jpg", ouptut);
-
+			this.outputFile = new File("src/main/java/imgs/invertscale.jpg");
+			ImageIO.write(image, "jpg", this.outputFile);
+			elapsedMs = System.currentTimeMillis() - startTime;
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public long getElapsedMs(){
+		return this.elapsedMs;
+	}
+
+	public File getOutputFile(){
+		return this.outputFile;
 	}
 }

@@ -1,7 +1,5 @@
 package UI;
 
-import static org.junit.Assert.fail;
-
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -20,8 +18,9 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 import FilterClasses.BrigthScale;
-import FilterClasses.BrigthScale2;
 import FilterClasses.GrayScale;
+import FilterClasses.InvertScale;
+import FilterClasses.SepiaScale;
 import UI.ImageFrame;
 
 public class MainFrame extends JFrame{
@@ -233,18 +232,31 @@ public class MainFrame extends JFrame{
         String selectedFilter = String.valueOf(MainFrame.this.filterDropdown.getSelectedItem());
         String selectedOpMode = String.valueOf(MainFrame.this.processingTypeDropdown.getSelectedItem());
         File output = null;
+        long elapsedMs = 0;
         switch(selectedFilter){
             case "Escala de Grises":
                 GrayScale filter = new GrayScale(this.selectedFile, selectedOpMode);
                 output = filter.getOutputFile();
+                elapsedMs = filter.getElapsedMs();
                 break;
             case "Ajuste de brillo":
                 int factor = levelSlider.getValue();
                 System.out.println("Factor de: " + factor);
-                BrigthScale2 filter2 = new BrigthScale2(this.selectedFile,factor,selectedOpMode);
+                BrigthScale filter2 = new BrigthScale(this.selectedFile,factor,selectedOpMode);
                 output = filter2.getOutputFile();
+                elapsedMs = filter2.getElapsedMs();
+                break;
+            case "Sepia":
+                SepiaScale filter3 = new SepiaScale(this.selectedFile, selectedOpMode);
+                output = filter3.getOutputFile();
+                elapsedMs = filter3.getElapsedMs();
+                break;
+            case "Color Invertido":
+                InvertScale filter4 = new InvertScale(this.selectedFile, selectedOpMode);
+                output = filter4.getOutputFile();
+                elapsedMs = filter4.getElapsedMs();
                 break;
         }
-        ImageFrame imageView = new ImageFrame(output);
+        ImageFrame imageView = new ImageFrame(output,elapsedMs);
     }
 }

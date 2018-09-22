@@ -8,6 +8,7 @@ public class BrigthScale {
 	private File inputFile;
 	private File outputFile;
 	private int factor;
+	private long elapsedMs;
 
 	public BrigthScale(File inputFile,int factor,String opMode){
 		this.inputFile = inputFile;
@@ -16,6 +17,7 @@ public class BrigthScale {
 	}
 
 	private void sequentialProcess(){
+		long startTime = System.currentTimeMillis();
 		try {
 			BufferedImage image = ImageIO.read(this.inputFile);
 			int width = image.getWidth();
@@ -56,12 +58,17 @@ public class BrigthScale {
 					image.setRGB(j, i,new Color(r,g,b).getRGB());
 				}
 			}
-			this.outputFile = new File("/home/josehr/Documentos/proyecto_filtros_SOP/src/main/java/imgs/brigthscale.jpg");
+			this.outputFile = new File("src/main/java/imgs/brigthscale.jpg");
 			ImageIO.write(image, "jpg", this.outputFile);
+			elapsedMs = System.currentTimeMillis() - startTime;
 
 		} catch (Exception e) {
-			System.out.print("Exception: "+e.toString());
+			System.out.print("Exception: " + e.toString());
 		}
+	}
+
+	public long getElapsedMs(){
+		return this.elapsedMs;
 	}
 
 	public File getOutputFile(){
