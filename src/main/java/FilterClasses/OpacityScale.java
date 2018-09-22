@@ -1,15 +1,15 @@
 package FilterClasses;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import java.io.*;
-
 import javax.imageio.ImageIO;
 
 public class OpacityScale {
 	File inputFile;
 	File outputFile;
 	Double opacityLevel;
+	private long elapsedMs;
+
 
 	public OpacityScale(File inputFile, Double opLevel,String opMode) {
 		this.inputFile = inputFile;
@@ -18,6 +18,7 @@ public class OpacityScale {
 	}
 
 	private void sequentialProcess(){
+		long startTime = System.currentTimeMillis();
 		try {
 			BufferedImage image = ImageIO.read(this.inputFile);
 			int	width = image.getWidth();
@@ -36,10 +37,15 @@ public class OpacityScale {
 			}
 			this.outputFile = new File("src/main/java/imgs/opac.jpg");
 			ImageIO.write(image, "jpg", this.outputFile);
+			elapsedMs = System.currentTimeMillis() - startTime;
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public long getElapsedMs(){
+		return this.elapsedMs;
 	}
 
 	public File getOutputFile(){

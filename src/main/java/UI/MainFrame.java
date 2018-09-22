@@ -18,8 +18,10 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 import FilterClasses.BrigthScale;
+import FilterClasses.GaussianBlurScale;
 import FilterClasses.GrayScale;
 import FilterClasses.InvertScale;
+import FilterClasses.OpacityScale;
 import FilterClasses.SepiaScale;
 import UI.ImageFrame;
 
@@ -233,6 +235,7 @@ public class MainFrame extends JFrame{
         String selectedOpMode = String.valueOf(MainFrame.this.processingTypeDropdown.getSelectedItem());
         File output = null;
         long elapsedMs = 0;
+         
         switch(selectedFilter){
             case "Escala de Grises":
                 GrayScale filter = new GrayScale(this.selectedFile, selectedOpMode);
@@ -255,6 +258,19 @@ public class MainFrame extends JFrame{
                 InvertScale filter4 = new InvertScale(this.selectedFile, selectedOpMode);
                 output = filter4.getOutputFile();
                 elapsedMs = filter4.getElapsedMs();
+                break;
+            case "Opacidad":
+                Double factor1 = Double.valueOf((double)levelSlider.getValue() / 100);
+                //System.out.println("Factor de: " + factor1);
+                OpacityScale filter5 = new OpacityScale(this.selectedFile,factor1,selectedOpMode);
+                output = filter5.getOutputFile();
+                elapsedMs = filter5.getElapsedMs();
+                break;
+            case "Desenfoque Gaussiano":
+                //System.out.println("Factor de: " + factor1);
+                GaussianBlurScale filter6 = new GaussianBlurScale(this.selectedFile,selectedOpMode);
+                output = filter6.getOutputFile();
+                elapsedMs = filter6.getElapsedMs();
                 break;
         }
         ImageFrame imageView = new ImageFrame(output,elapsedMs);
