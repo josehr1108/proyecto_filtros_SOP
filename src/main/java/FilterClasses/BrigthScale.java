@@ -1,37 +1,25 @@
 package FilterClasses;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import java.io.*;
-
 import javax.imageio.ImageIO;
 
-
 public class BrigthScale {
+	private File inputFile;
+	private File outputFile;
+	private int factor;
 
-	BufferedImage image;
-	int width; 
-	
-	int height;
-	int factor = 20;
-	
-	public void setFactor(int f){
-		this.factor = f;
-	}
-	public int getFactor(){
-		return this.factor;
+	public BrigthScale(File inputFile,int factor,String opMode){
+		this.inputFile = inputFile;
+		this.factor = factor;
+		sequentialProcess();
 	}
 
-
-	public BrigthScale() {
-
+	private void sequentialProcess(){
 		try {
-			File input = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/digital_image_processing.jpg");
-			image = ImageIO.read(input);
-			width = image.getWidth();
-			height = image.getHeight();
-			int sepiaDepth = 20;
+			BufferedImage image = ImageIO.read(this.inputFile);
+			int width = image.getWidth();
+			int height = image.getHeight();
 
 			int w = image.getWidth();
 			int h = image.getHeight();
@@ -41,13 +29,11 @@ public class BrigthScale {
 			image.getRaster().getPixels(0, 0, w, h, pixels);
        
 			for (int i = 0; i < height; i++) {
-
 				for (int j = 0; j < width; j++) {
-
 					Color c=new Color(image.getRGB(j, i));
 
 					//adding factor to rgb values
-				int r=c.getRed()+ factor;
+					int r=c.getRed()+ factor;
 					int b=c.getBlue()+factor;
 					int g=c.getGreen()+factor;
 					if (r >= 256) {
@@ -68,18 +54,17 @@ public class BrigthScale {
 					b = 0;
 					 }
 					image.setRGB(j, i,new Color(r,g,b).getRGB());
-				
-				
-
-
 				}
 			}
-
-			File ouptut = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/brigthscale.jpg");
-			ImageIO.write(image, "jpg", ouptut);
+			this.outputFile = new File("/home/josehr/Documentos/proyecto_filtros_SOP/src/main/java/imgs/brigthscale.jpg");
+			ImageIO.write(image, "jpg", this.outputFile);
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public File getOutputFile(){
+		return this.outputFile;
 	}
 }

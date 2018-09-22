@@ -1,5 +1,7 @@
 package UI;
 
+import static org.junit.Assert.fail;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -17,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
+import FilterClasses.BrigthScale;
+import FilterClasses.BrigthScale2;
+import FilterClasses.GrayScale;
 import UI.ImageFrame;
 
 public class MainFrame extends JFrame{
@@ -227,7 +232,19 @@ public class MainFrame extends JFrame{
     private void invokeImageView(){
         String selectedFilter = String.valueOf(MainFrame.this.filterDropdown.getSelectedItem());
         String selectedOpMode = String.valueOf(MainFrame.this.processingTypeDropdown.getSelectedItem());
-        
-        ImageFrame imageView = new ImageFrame(this.selectedFile);
+        File output = null;
+        switch(selectedFilter){
+            case "Escala de Grises":
+                GrayScale filter = new GrayScale(this.selectedFile, selectedOpMode);
+                output = filter.getOutputFile();
+                break;
+            case "Ajuste de brillo":
+                int factor = levelSlider.getValue();
+                System.out.println("Factor de: " + factor);
+                BrigthScale2 filter2 = new BrigthScale2(this.selectedFile,factor,selectedOpMode);
+                output = filter2.getOutputFile();
+                break;
+        }
+        ImageFrame imageView = new ImageFrame(output);
     }
 }

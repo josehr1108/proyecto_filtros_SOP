@@ -1,4 +1,3 @@
-
 package FilterClasses;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +17,7 @@ public class GrayScale {
 
 	private void sequentialProcess(){
 		try {
-			BufferedImage	image = ImageIO.read(this.inputFile);
+			BufferedImage image = ImageIO.read(this.inputFile);
 			int	width = image.getWidth();
 			int	height = image.getHeight();
 			for (int i = 0; i < height; i++) {
@@ -34,7 +33,7 @@ public class GrayScale {
 					image.setRGB(j, i, newColor.getRGB());
 				}
 			}
-			this.outputFile = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/grayscale.jpg");
+			this.outputFile = new File("src/main/java/imgs/gray.jpg");
 			ImageIO.write(image, "jpg", this.outputFile);
 
 		} catch (Exception e) {
@@ -42,7 +41,7 @@ public class GrayScale {
 		}
 	}
 
-	private File getOutputFile(){
+	public File getOutputFile(){
 		return this.outputFile;
 	}
 }
