@@ -7,18 +7,19 @@ import javax.imageio.ImageIO;
 
 
 public class GrayScale {
+	private File inputFile;
+	private File outputFile;
 
-	BufferedImage image;
-	int width;
-	int height;
+	public GrayScale(File inputFile,String opMode) {
+		this.inputFile = inputFile;
+		this.sequentialProcess();
+	}
 
-	public GrayScale() {
-
+	private void sequentialProcess(){
 		try {
-			File input = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/digital_image_processing.jpg");
-			image = ImageIO.read(input);
-			width = image.getWidth();
-			height = image.getHeight();
+			BufferedImage image = ImageIO.read(this.inputFile);
+			int width = image.getWidth();
+			int height = image.getHeight();
        
 			for (int i = 0; i < height; i++) {
 
@@ -36,11 +37,15 @@ public class GrayScale {
 				}
 			}
 
-			File ouptut = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/grayscale.jpg");
-			ImageIO.write(image, "jpg", ouptut);
+			this.outputFile = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/grayscale.jpg");
+			ImageIO.write(image, "jpg", outputFile);
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	public File getOutputFile(){
+		return this.outputFile;
 	}
 }
