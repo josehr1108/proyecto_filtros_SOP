@@ -14,17 +14,11 @@ public class GaussianBlurScale {
 	BufferedImage image;
 	int width;
 	int height;
-	int[] filter = {1, 2, 1, 2, 1, 2, 1, 2, 1,
-		2, 1, 2, 1, 2, 1, 2, 1, 2,
-		1, 2, 1, 2, 1, 2, 1, 2, 1,
-		2, 1, 2, 1, 2, 1, 2, 1, 2,
-		1, 2, 1, 2, 4, 2, 1, 2, 1,
-		2, 1, 2, 1, 2, 1, 2, 1, 2,
-		1, 2, 1, 2, 1, 2, 1, 2, 1,
-		2, 1, 2, 1, 2, 1, 2, 1, 2,
-		1, 2, 1, 2, 1, 2, 1, 2, 1};
+	int[] filter = {1, 2, 1,
+					2, 4, 2,
+					1, 2, 1};
 
-	int filterWidth = 27;
+	int filterWidth = 3;
 
 	int sum;
 
