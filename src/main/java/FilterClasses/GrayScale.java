@@ -1,3 +1,5 @@
+
+package FilterClasses;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -5,24 +7,22 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
-
 public class GrayScale {
-	BufferedImage image;
-	int width;
-	int height;
+	File inputFile;
+	File outputFile;
 
-	public GrayScale() {
+	public GrayScale(File inputFile, String opMode) {
+		this.inputFile = inputFile;
+		this.sequentialProcess();
+	}
 
+	private void sequentialProcess(){
 		try {
-			File input = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/digital_image_processing.jpg");
-			image = ImageIO.read(input);
-			width = image.getWidth();
-			height = image.getHeight();
-       
+			BufferedImage	image = ImageIO.read(this.inputFile);
+			int	width = image.getWidth();
+			int	height = image.getHeight();
 			for (int i = 0; i < height; i++) {
-
 				for (int j = 0; j < width; j++) {
-
 					Color c = new Color(image.getRGB(j, i));
 					int red = (int) (c.getRed() * 0.299);
 					int green = (int) (c.getGreen() * 0.587);
@@ -34,12 +34,15 @@ public class GrayScale {
 					image.setRGB(j, i, newColor.getRGB());
 				}
 			}
-
-			File ouptut = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/grayscale.jpg");
-			ImageIO.write(image, "jpg", ouptut);
+			this.outputFile = new File("/home/kenneth/Documentos/repos/proyecto_filtros_SOP/src/main/java/imgs/grayscale.jpg");
+			ImageIO.write(image, "jpg", this.outputFile);
 
 		} catch (Exception e) {
 			System.out.print("Exception: "+e.toString());
 		}
+	}
+
+	private File getOutputFile(){
+		return this.outputFile;
 	}
 }
