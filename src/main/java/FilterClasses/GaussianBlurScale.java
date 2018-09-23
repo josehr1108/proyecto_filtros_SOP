@@ -10,11 +10,11 @@ import javax.imageio.ImageIO;
 
 
 public class GaussianBlurScale {
-	private final int[] FILTER = {1, 2, 1,
-					2, 4, 2,
-					1, 2, 1};
+	private final int[] FILTER = { 1, 2, 1,
+								   2, 4, 2,
+								   1, 2, 1 };
 
-	private final int FILTER_WIDTH = 3;
+	private final int FILTER_WIDTH = 9;
 	private File inputFile;
 	private File outputFile;
 	private long elapsedMs;
