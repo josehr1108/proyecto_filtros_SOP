@@ -58,3 +58,8 @@ Thumbs.db
 
 # config de "JAVA Debugger" para VS Code
  .vscode
+
+#imagenes generadas
+*.jpg
+*.jpeg
+*.png

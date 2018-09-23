@@ -267,7 +267,6 @@ public class MainFrame extends JFrame{
                 elapsedMs = filter5.getElapsedMs();
                 break;
             case "Desenfoque Gaussiano":
-                //System.out.println("Factor de: " + factor1);
                 GaussianBlurScale filter6 = new GaussianBlurScale(this.selectedFile,selectedOpMode);
                 output = filter6.getOutputFile();
                 elapsedMs = filter6.getElapsedMs();
