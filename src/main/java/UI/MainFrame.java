@@ -40,6 +40,8 @@ public class MainFrame extends JFrame{
         "Compresión sin pérdida",
         "Segmentación",
         "Textura",
+        "Suavidad"
+
     };
     private final String[] PROC_TYPES = {"Secuencial","Paralelo"};
     private JPanel inputPanel;
@@ -239,7 +241,7 @@ public class MainFrame extends JFrame{
          
         switch(selectedFilter){
             case "Escala de Grises":
-                SmoothScale filter = new SmoothScale(this.selectedFile, selectedOpMode);
+                GrayScale filter = new GrayScale(this.selectedFile, selectedOpMode);
                 output = filter.getOutputFile();
                 elapsedMs = filter.getElapsedMs();
                 break;
@@ -269,9 +271,15 @@ public class MainFrame extends JFrame{
                 break;
             case "Desenfoque Gaussiano":
                 GaussianBlurScale filter6 = new GaussianBlurScale(this.selectedFile,selectedOpMode);
-                output = filter6.getOutputFile();
+                output =
+                filter6.getOutputFile();
                 elapsedMs = filter6.getElapsedMs();
                 break;
+            case "Suavidad":
+                SmoothScale filter7 = new SmoothScale(this.selectedFile, selectedOpMode);
+                output = filter7.getOutputFile();
+                elapsedMs = filter7.getElapsedMs();
+            break;
         }
         ImageFrame imageView = new ImageFrame(output,elapsedMs);
     }
