@@ -19,13 +19,17 @@ public class SmoothScale {
 	int[][][] rgbbuffer ;
 	BufferedImage imge;
 	
+		//Propiedades de modo paralelo
+		private static int[] srcRgbArray;
+		private static int[] destRgbArray;
+
 	public SmoothScale(File inputFile,String opMode) {
 		this.inputFile = inputFile;
 		if(opMode == "Paralelo"){
-			this.SmoothMage();
+			this.SmoothMageParallel();
 		}
 		else{
-			this.SmoothMage2();
+			this.SmoothMage();
 		}
 	}
 	private BufferedImage getIMG(){
@@ -110,7 +114,7 @@ public class SmoothScale {
 	}
 
 
-	private void SmoothMage(){
+	private void SmoothMageParallel(){
 
 	
 		try {
@@ -195,7 +199,7 @@ public class SmoothScale {
 						@Override
 						public void run() {	
 							int t1W = (int) (getW() / 3);
-							int t1H =  (int) (getH() /3);
+							int t1H =  (int) (getH() / 3);
 
 					
 							for (int i = 1; i < t1H -1; i++) {
@@ -379,9 +383,7 @@ public class SmoothScale {
 	this.elapsedMs = TimeUnit.NANOSECONDS.toMillis(endTime-startTime);	
 }
 
-	private void SmoothMage2(){
-	
-		
+	private void SmoothMage(){
 		BufferedImage imge;
 		int[][][] rgb_buffer ;
 		File tFile;
@@ -505,8 +507,6 @@ public class SmoothScale {
 				}
 			}
 			File nn = getOutputFile();
-			System.out.println("<<<<<<<<<<<<<<<<" + getOutputFile());
-			
 				ImageIO.write(imge, "jpg", nn);	
 			}
 			catch (Exception e) {
@@ -516,6 +516,8 @@ public class SmoothScale {
 			long endTime = System.nanoTime();
 			this.elapsedMs = TimeUnit.NANOSECONDS.toMillis(endTime-startTime);	
 }
+
+
 
 	public long getElapsedMs(){
 		return this.elapsedMs;
