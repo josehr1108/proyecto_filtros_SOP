@@ -15,13 +15,21 @@ public class GaussianBlurScale {
 								   1, 2, 1 };
 
 	private final int FILTER_WIDTH = 9;
+	
 	private File inputFile;
 	private File outputFile;
 	private long elapsedMs;
 
+	//Propiedades de modo paralelo
+	private static int[] srcRgbArray;
+	private static int[] destRgbArray;
+
 	public GaussianBlurScale(File inputFile, String opMode){
 			this.inputFile = inputFile;
-			this.sequentialProcess();
+			if(opMode == "Paralelo")
+				paralellProcess();
+			else
+				sequentialProcess();
 	}
 
 	private void sequentialProcess(){
@@ -77,6 +85,59 @@ public class GaussianBlurScale {
 			//TODO: handle exception
 		}
 	}
+
+	private void paralellProcess(){
+		long start = (long)(System.nanoTime() / 1000000);
+		try {
+			BufferedImage srcImg = ImageIO.read(this.inputFile);
+			int width = srcImg.getWidth();
+			int height = srcImg.getHeight();
+
+			srcRgbArray = srcImg.getRGB(0,0, width, height, null, 0, width);
+			destRgbArray = new int[srcRgbArray.length];
+
+			IntStream pixelIndexList= IntStream.range(0, srcRgbArray.length);
+			destRgbArray = pixelIndexList.parallel().map(GaussianBlurScale::applyPixelTransform).toArray();
+
+			BufferedImage dstImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			dstImage.setRGB(0, 0, width, height, destRgbArray, 0, width);
+			this.outputFile = new File("src/main/java/imgs/gaussianblurscale.jpg");
+		
+			ImageIO.write(dstImage, "jpg", this.outputFile);
+			long finish = (long)(System.nanoTime() / 1000000);
+			this.elapsedMs = (long)(finish - start);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static int applyPixelTransform(int pixelIndex){
+		Color pixelColor = new Color(srcRgbArray[pixelIndex]);
+		int red = pixelColor.getRed() + factor;;
+		int green = pixelColor.getGreen() + factor;
+		int blue = pixelColor.getBlue() + factor;
+		if (red >= 256) {
+			red = 255;
+		} else if (red < 0) {
+			red = 0;
+		}
+	   
+		if (green >= 256) {
+		   green = 255;
+		} else if (green < 0) {
+		   green = 0;
+		}
+	   
+		if (blue >= 256) {
+		   blue = 255;
+		} else if (blue < 0) {
+		   blue = 0;
+		}
+		Color newColor = new Color(red,green,blue);
+		return newColor.getRGB();
+	}
+
 
 	public long getElapsedMs(){
 		return this.elapsedMs;

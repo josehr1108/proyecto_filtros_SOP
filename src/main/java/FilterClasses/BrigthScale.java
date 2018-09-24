@@ -2,18 +2,27 @@ package FilterClasses;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.stream.IntStream;
+
 import javax.imageio.ImageIO;
 
 public class BrigthScale {
 	private File inputFile;
 	private File outputFile;
-	private int factor;
+	private static int factor;
 	private long elapsedMs;
+
+	//Propiedades de modo paralelo
+	private static int[] srcRgbArray;
+	private static int[] destRgbArray;
 
 	public BrigthScale(File inputFile,int factor,String opMode){
 		this.inputFile = inputFile;
 		this.factor = factor;
-		sequentialProcess();
+		if(opMode == "Paralelo")
+			paralellProcess();
+		else
+			sequentialProcess();
 	}
 
 	private void sequentialProcess(){
@@ -22,13 +31,6 @@ public class BrigthScale {
 			BufferedImage image = ImageIO.read(this.inputFile);
 			int width = image.getWidth();
 			int height = image.getHeight();
-
-			int w = image.getWidth();
-			int h = image.getHeight();
-	
-			// We need 3 integers (for R,G,B color values) per pixel.
-			int[] pixels = new int[w * h * 3];
-			image.getRaster().getPixels(0, 0, w, h, pixels);
        
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
@@ -65,6 +67,58 @@ public class BrigthScale {
 		} catch (Exception e) {
 			System.out.print("Exception: " + e.toString());
 		}
+	}
+
+	private void paralellProcess(){
+		long start = (long)(System.nanoTime() / 1000000);
+		try {
+			BufferedImage srcImg = ImageIO.read(this.inputFile);
+			int width = srcImg.getWidth();
+			int height = srcImg.getHeight();
+
+			srcRgbArray = srcImg.getRGB(0,0, width, height, null, 0, width);
+			destRgbArray = new int[srcRgbArray.length];
+
+			IntStream pixelIndexList= IntStream.range(0, srcRgbArray.length);
+			destRgbArray = pixelIndexList.parallel().map(BrigthScale::applyPixelTransform).toArray();
+
+			BufferedImage dstImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			dstImage.setRGB(0, 0, width, height, destRgbArray, 0, width);
+			this.outputFile = new File("src/main/java/imgs/brigth.jpg");
+		
+			ImageIO.write(dstImage, "jpg", this.outputFile);
+			long finish = (long)(System.nanoTime() / 1000000);
+			this.elapsedMs = (long)(finish - start);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static int applyPixelTransform(int pixelIndex){
+		Color pixelColor = new Color(srcRgbArray[pixelIndex]);
+		int red = pixelColor.getRed() + factor;;
+		int green = pixelColor.getGreen() + factor;
+		int blue = pixelColor.getBlue() + factor;
+		if (red >= 256) {
+			red = 255;
+		} else if (red < 0) {
+			red = 0;
+		}
+	   
+		if (green >= 256) {
+		   green = 255;
+		} else if (green < 0) {
+		   green = 0;
+		}
+	   
+		if (blue >= 256) {
+		   blue = 255;
+		} else if (blue < 0) {
+		   blue = 0;
+		}
+		Color newColor = new Color(red,green,blue);
+		return newColor.getRGB();
 	}
 
 	public long getElapsedMs(){
