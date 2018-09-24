@@ -27,7 +27,8 @@ public class GaussianBlurScale {
 	public GaussianBlurScale(File inputFile, String opMode){
 			this.inputFile = inputFile;
 			if(opMode == "Paralelo")
-				paralellProcess();
+				//paralellProcess();
+				System.out.println("Nada que hacer...");
 			else
 				sequentialProcess();
 	}
@@ -88,7 +89,7 @@ public class GaussianBlurScale {
 		}
 	}
 
-	private void paralellProcess(){
+	/*private void paralellProcess(){
 		long start = (long)(System.nanoTime() / 1000000);
 		try {
 			BufferedImage srcImg = ImageIO.read(this.inputFile);
@@ -138,8 +139,7 @@ public class GaussianBlurScale {
 		}
 		Color newColor = new Color(red,green,blue);
 		return newColor.getRGB();
-	}
-
+	}*/
 
 	public long getElapsedMs(){
 		return this.elapsedMs;
