@@ -50,11 +50,13 @@ public class GaussianBlurScale {
 			// apply filter
 			for (int h = height - FILTER.length / FILTER_WIDTH + 1, w = width - FILTER_WIDTH + 1, y = 0; y < h; y++) {
 				for (int x = 0; x < w; x++) {
+					
 					int rgb = image.getRGB(x, y);
 					Color color = new Color(rgb, true);
 					int r = 0;
 					int g = 0;
 					int b = 0;
+
 					for (int filterIndex = 0, pixelIndex = y * width + x;
 							filterIndex < FILTER.length;
 							pixelIndex += pixelIndexOffset) {

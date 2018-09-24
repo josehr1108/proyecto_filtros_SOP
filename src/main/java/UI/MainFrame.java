@@ -23,6 +23,7 @@ import FilterClasses.GrayScale;
 import FilterClasses.InvertScale;
 import FilterClasses.OpacityScale;
 import FilterClasses.SepiaScale;
+import FilterClasses.SmoothScale;
 import UI.ImageFrame;
 
 public class MainFrame extends JFrame{
@@ -238,7 +239,7 @@ public class MainFrame extends JFrame{
          
         switch(selectedFilter){
             case "Escala de Grises":
-                GrayScale filter = new GrayScale(this.selectedFile, selectedOpMode);
+                SmoothScale filter = new SmoothScale(this.selectedFile, selectedOpMode);
                 output = filter.getOutputFile();
                 elapsedMs = filter.getElapsedMs();
                 break;
